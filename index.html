@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillBridge Academy - Pakistan's Premier EdTech Platform</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js for 3D Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            pak: {
+              green: '#00401A',
+              light: '#01682B',
+              accent: '#059669',
+              gold: '#D97706'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    .display-font {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    /* 3D Animations */
+    @keyframes float3D {
+      0%, 100% { transform: translateY(0px) rotate3d(1, 1, 0, 0deg); }
+      50% { transform: translateY(-12px) rotate3d(1, 1, 0, 8deg); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+    .floating-3d {
+      animation: float3D 6s ease-in-out infinite;
+    }
+    .glow-aura {
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+
+    /* 3D Card Tilt */
+    .card-3d-wrap {
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+    .card-3d {
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s ease;
+      transform-style: preserve-3d;
+    }
+    .card-3d:hover {
+      box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.25);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #059669; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- TOP PAKISTAN BADGE BAR -->
+  <div class="bg-gradient-to-r from-emerald-950 via-green-900 to-slate-950 text-emerald-300 border-b border-emerald-900/60 py-2 px-4 text-xs font-medium">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center justify-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded text-[11px] font-bold tracking-wide">
+          🇵🇰 PAKISTAN EDTECH
+        </span>
+        <span>Digital Marketing, CIT, English Language, IT, Graphic Designing & Tech Courses in PKR • 12+ Expert Mentors</span>
+      </div>
+      <div class="flex items-center gap-4 text-xs font-semibold">
+        <span class="text-amber-400">Admin: 👑 RIDA</span>
+        <span class="hidden sm:inline text-slate-600">|</span>
+        <button onclick="navigate('signup')" class="text-white hover:text-emerald-400 transition underline underline-offset-4">
+          Admission Open 2026
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header class="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 cursor-pointer group" onclick="navigate('home')">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-emerald-500/30 group-hover:scale-105 transition">
+          S
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="font-black text-xl tracking-tight text-white display-font">SkillBridge</span>
+            <span class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded font-mono font-bold">PK</span>
+          </div>
+          <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Academy Pakistan</span>
+        </div>
+      </div>
+
+      <!-- Nav Links -->
+      <nav class="hidden md:flex items-center gap-1 text-sm font-semibold text-slate-300">
+        <button onclick="navigate('home')" class="nav-btn px-3.5 py-2 rounded-xl hover:text-emerald-400 hover:bg-slate-900 transition text-emerald-400 bg-slate-900" id="nav-home">
+          Home
+        </button>
+        <button onclick="navigate('courses')" class="nav-btn px-3.5 py-2 rounded-xl hover:text-emerald-400 hover:bg-slate-900 transition" id="nav-courses">
+          Courses (PKR)
+        </button>
+        <button onclick="navigate('teachers')" class="nav-btn px-3.5 py-2 rounded-xl hover:text-emerald-400 hover:bg-slate-900 transition flex items-center gap-1.5" id="nav-teachers">
+          <span>👨‍🏫 Faculty (12+ Teachers)</span>
+        </button>
+        <button onclick="navigate('student')" class="nav-btn px-3.5 py-2 rounded-xl hover:text-emerald-400 hover:bg-slate-900 transition flex items-center gap-2" id="nav-student">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Student Portal & Directory
+        </button>
+        <button onclick="navigate('admin')" class="nav-btn px-3.5 py-2 rounded-xl hover:text-amber-400 hover:bg-slate-900 transition flex items-center gap-2" id="nav-admin">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span> Admin (Rida)
+        </button>
+      </nav>
+
+      <!-- Auth Controls -->
+      <div class="flex items-center gap-2 sm:gap-3" id="nav-auth-buttons">
+        <button onclick="navigate('login')" class="px-4 py-2 text-sm font-bold text-slate-200 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl transition">
+          Login
+        </button>
+        <button onclick="navigate('signup')" class="px-4 sm:px-5 py-2 text-sm font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-xl shadow-lg shadow-emerald-600/30 transition transform hover:-translate-y-0.5">
+          Sign Up Free
+        </button>
+      </div>
+
+      <!-- User Active Badge -->
+      <div id="nav-user-logged" class="hidden items-center gap-3">
+        <div class="text-right hidden sm:block">
+          <div class="text-xs font-bold text-white" id="logged-user-name">RIDA MATEEN</div>
+          <div class="text-[10px] text-emerald-400 font-medium" id="logged-user-class">BS CS • Age 18</div>
+        </div>
+        <button onclick="logoutUser()" class="p-2 bg-slate-900 hover:bg-rose-950/60 text-slate-400 hover:text-rose-400 border border-slate-800 hover:border-rose-900 rounded-xl text-xs transition">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1">
+
+    <!-- VIEW 1: HOME PAGE -->
+    <div id="view-home" class="page-view">
+      <!-- 3D HERO SECTION -->
+      <section class="relative pt-12 pb-24 overflow-hidden border-b border-slate-800/80">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none glow-aura"></div>
+        <div class="absolute top-1/3 right-10 w-[400px] h-[400px] bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-bold">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>PAKISTAN KA NO. 1 DIGITAL TRAINING PORTAL</span>
+              </div>
+
+              <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.1] display-font">
+                Digital Skills Seekhein: <br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+                  Affordable Fees in Pakistani Rupees
+                </span>
+              </h1>
+
+              <p class="text-slate-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                <strong>Digital Marketing, CIT, English Language, IT, Graphic Designing, Web Development & AI</strong>. 12+ tajurba-kar Pakistani teachers ki zair-e-nigraani practical training aur verified certificates.
+              </p>
+
+              <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                <button onclick="navigate('courses')" class="px-7 py-4 text-sm font-extrabold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-2xl shadow-xl shadow-emerald-500/25 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                  <span>Tamam Courses Dekhein (PKR)</span>
+                  <span>→</span>
+                </button>
+                <button onclick="navigate('student')" class="px-7 py-4 text-sm font-extrabold text-slate-200 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 rounded-2xl transition flex items-center gap-2">
+                  <span>📋 Students Directory List</span>
+                </button>
+              </div>
+
+              <div class="pt-6 grid grid-cols-4 gap-3 max-w-lg mx-auto lg:mx-0 border-t border-slate-800/80 text-center">
+                <div>
+                  <div class="text-xl sm:text-2xl font-black text-white display-font">12+</div>
+                  <div class="text-[11px] text-slate-400 font-medium">Expert Teachers</div>
+                </div>
+                <div>
+                  <div class="text-xl sm:text-2xl font-black text-emerald-400 display-font">12+</div>
+                  <div class="text-[11px] text-slate-400 font-medium">Courses (PKR)</div>
+                </div>
+                <div>
+                  <div class="text-xl sm:text-2xl font-black text-teal-400 display-font">35,000+</div>
+                  <div class="text-[11px] text-slate-400 font-medium">Students Enrolled</div>
+                </div>
+                <div>
+                  <div class="text-xl sm:text-2xl font-black text-amber-400 display-font">RIDA</div>
+                  <div class="text-[11px] text-slate-400 font-medium">Super Admin</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3D Canvas -->
+            <div class="lg:col-span-5 flex flex-col items-center justify-center relative">
+              <div class="relative w-full max-w-[420px] aspect-square rounded-3xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800 shadow-2xl p-4 flex flex-col items-center justify-center overflow-hidden">
+                <div id="three-hero-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+                
+                <div class="absolute top-4 left-4 bg-slate-900/90 backdrop-blur-md border border-emerald-500/40 px-3.5 py-2 rounded-2xl shadow-xl floating-3d flex items-center gap-2.5">
+                  <span class="text-2xl">⚡</span>
+                  <div>
+                    <div class="text-[11px] font-bold text-white">Interactive 3D Engine</div>
+                    <div class="text-[9px] text-emerald-400 font-semibold">Mouse se rotate karein</div>
+                  </div>
+                </div>
+
+                <div class="absolute bottom-4 right-4 bg-slate-900/90 backdrop-blur-md border border-teal-500/40 px-3.5 py-2 rounded-2xl shadow-xl floating-3d flex items-center gap-2.5" style="animation-delay: -3s;">
+                  <span class="text-2xl">🇵🇰</span>
+                  <div>
+                    <div class="text-[11px] font-bold text-white">Affordable PKR Fees</div>
+                    <div class="text-[9px] text-teal-300 font-semibold">Easypaisa / JazzCash / Bank</div>
+                  </div>
+                </div>
+              </div>
+              <p class="text-center text-xs text-slate-500 mt-3 font-medium">
+                👆 Mouse ghumayein ya drag karein 3D model se interact karne ke liye!
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURED COURSES -->
+      <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/80 text-xs font-bold mb-2">
+              <span>🌟 PAKISTAN'S TOP IN-DEMAND SKILLS</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-white display-font">Featured Courses with Pictures & Prices (PKR)</h2>
+            <p class="text-sm text-slate-400 mt-1">Digital Marketing, CIT, English Language, IT, Graphic Designing aur technical skills.</p>
+          </div>
+          <button onclick="navigate('courses')" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-emerald-900/60 rounded-xl text-sm font-bold transition flex items-center gap-2">
+            View All 12+ Courses (PKR) →
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="home-featured-grid"></div>
+      </section>
+
+      <!-- FACULTY HIGHLIGHT -->
+      <section class="py-16 bg-slate-900/60 border-t border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-950 text-teal-400 border border-teal-800/80 text-xs font-bold mb-2">
+                <span>👨‍🏫 CERTIFIED PAKISTANI INSTRUCTORS</span>
+              </div>
+              <h2 class="text-3xl font-extrabold text-white display-font">Meet Our 12+ Expert Teachers</h2>
+              <p class="text-sm text-slate-400 mt-1">Har subject ke alag alag expert teachers jin ka saalon ka practical experience hai.</p>
+            </div>
+            <button onclick="navigate('teachers')" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-teal-400 border border-teal-900/60 rounded-xl text-sm font-bold transition">
+              Tamam 12+ Teachers Ki Profile Dekhein →
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" id="home-teachers-snippet"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- VIEW 2: COURSES CATALOG -->
+    <div id="view-courses" class="page-view hidden py-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/80 text-xs font-bold mb-3">
+            <span>🇵🇰 PAKISTANI RUPEES (PKR) COMPLETE CATALOG</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-white display-font">All Courses with Photos & 10+ Teachers</h1>
+          <p class="text-slate-400 text-sm mt-1">Digital Marketing, CIT, Spoken English, IT Fundamentals, Graphic Designing, Web Dev, AI, Cyber Security etc.</p>
+        </div>
+
+        <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl shadow-xl flex flex-col md:flex-row gap-4 items-center justify-between mb-8">
+          <div class="relative w-full md:w-96">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">🔍</span>
+            <input type="text" id="course-search-input" onkeyup="filterCoursesList()" placeholder="Search CIT, Marketing, English, IT, Design, Teacher..." class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+          </div>
+          <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            <select id="filter-cat" onchange="filterCoursesList()" class="px-3.5 py-2.5 text-xs sm:text-sm bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500">
+              <option value="all">Tamam Categories</option>
+              <option value="Digital Marketing">Digital Marketing</option>
+              <option value="CIT / Office">CIT / IT Certification</option>
+              <option value="English Language">English Language</option>
+              <option value="IT Fundamentals">IT & Networking</option>
+              <option value="Graphic Designing">Graphic Designing</option>
+              <option value="Web Development">Web Development</option>
+              <option value="Artificial Intelligence">AI & Machine Learning</option>
+              <option value="Cyber Security">Cyber Security</option>
+            </select>
+            <select id="filter-price" onchange="filterCoursesList()" class="px-3.5 py-2.5 text-xs sm:text-sm bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500">
+              <option value="all">Tamam Fees (All PKR)</option>
+              <option value="free">Muft Courses (Free)</option>
+              <option value="under10k">Under Rs. 10,000</option>
+              <option value="above10k">Rs. 10,000 se zyada</option>
+            </select>
+            <select id="filter-sort" onchange="filterCoursesList()" class="px-3.5 py-2.5 text-xs sm:text-sm bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500">
+              <option value="popular">Most Popular</option>
+              <option value="price-asc">Fees: Low to High (PKR)</option>
+              <option value="price-desc">Fees: High to Low (PKR)</option>
+              <option value="rating">Highest Rated</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="catalog-courses-grid"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: TEACHERS DIRECTORY -->
+    <div id="view-teachers" class="page-view hidden py-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-10 text-center max-w-3xl mx-auto">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-950 text-teal-400 border border-teal-800/80 text-xs font-bold mb-3">
+            <span>👨‍🏫 PAKISTAN'S TOP INSTRUCTOR ROSTER (12+ TEACHERS)</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-white display-font">Our Distinguished Faculty & Mentors</h1>
+          <p class="text-slate-400 text-sm mt-2">Har subject ke liye certified specialized Pakistani teachers mojud hain.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="all-teachers-grid"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: STUDENT PORTAL & DIRECTORY -->
+    <div id="view-student" class="page-view hidden py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-900 border border-emerald-900/60 rounded-3xl p-6 sm:p-8 shadow-xl mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="flex items-center gap-5">
+            <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white text-3xl font-black shadow-lg shadow-emerald-500/20">
+              <span id="dash-avatar-letter">R</span>
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold mb-1.5">
+                <span>🇵🇰 Verified Pakistani Student Account</span>
+              </div>
+              <h1 class="text-2xl sm:text-3xl font-black text-white display-font" id="dash-student-name">RIDA MATEEN</h1>
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-300 mt-1">
+                <span>Walid Ka Naam: <strong class="text-white" id="dash-father-name">Abdul Mateen</strong></span>
+                <span>•</span>
+                <span>Class: <strong class="text-emerald-400" id="dash-class">BS Computer Science</strong></span>
+                <span>•</span>
+                <span>Age: <strong class="text-white" id="dash-age">18 Saal</strong></span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <button onclick="showDirectoryTab()" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center gap-2">
+              <span>📋 View Enrolled Students Directory</span>
+            </button>
+            <button onclick="navigate('courses')" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition">
+              + Enroll In Another Course (PKR)
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Enrolled Courses</div>
+            <div class="text-2xl font-black text-white mt-1 display-font">3 Courses</div>
+            <div class="text-[11px] text-emerald-400 font-medium mt-1">Digital Marketing, CIT, React</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Learning Hours</div>
+            <div class="text-2xl font-black text-emerald-400 mt-1 display-font">42 Hours</div>
+            <div class="text-[11px] text-slate-400 font-medium mt-1">Total time spent</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Quizzes Passed</div>
+            <div class="text-2xl font-black text-teal-400 mt-1 display-font">19 / 20</div>
+            <div class="text-[11px] text-teal-300 font-medium mt-1">95% Success Score</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Certificates</div>
+            <div class="text-2xl font-black text-amber-400 mt-1 display-font">2 Earned 🏆</div>
+            <div class="text-[11px] text-amber-300 font-medium mt-1">Ready to download</div>
+          </div>
+        </div>
+
+        <!-- STUDENTS DIRECTORY -->
+        <div id="enrolled-students-directory-section" class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl mb-10">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-bold mb-1">
+                <span>📋 STUDENTS DIRECTORY DIRECT VIEW</span>
+              </div>
+              <h2 class="text-2xl font-black text-white display-font">Course-Wise Enrolled Students Directory</h2>
+              <p class="text-xs text-slate-400 mt-1">Har course ke andar enrolled students ki quantity, Name, Father Name, Class, Age aur Email ID ki mukammal fehrist.</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <label class="text-xs font-bold text-slate-400">Select Course:</label>
+              <select id="directory-course-select" onchange="renderSelectedCourseStudents()" class="px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs sm:text-sm text-emerald-400 font-bold focus:outline-none focus:border-emerald-500"></select>
+            </div>
+          </div>
+
+          <div class="my-6 p-4 bg-slate-950/70 border border-slate-800 rounded-2xl flex flex-wrap items-center justify-between gap-4" id="directory-course-header-badge"></div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+              <thead class="bg-slate-950 text-slate-400 text-xs uppercase font-bold border-b border-slate-800">
+                <tr>
+                  <th class="py-3.5 px-4">Student Name</th>
+                  <th class="py-3.5 px-4">Father Name</th>
+                  <th class="py-3.5 px-4">Class / Degree</th>
+                  <th class="py-3.5 px-4">Age</th>
+                  <th class="py-3.5 px-4">Email ID</th>
+                  <th class="py-3.5 px-4">Enrollment Date</th>
+                  <th class="py-3.5 px-4 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60" id="directory-students-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <h2 class="text-xl font-bold text-white display-font mb-4">Aapke Enrolled Courses (Continue Learning)</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between">
+            <div class="relative h-44 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80" alt="Digital Marketing" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+              <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
+                60% Mukammal (Complete)
+              </span>
+            </div>
+            <div class="p-5">
+              <div class="text-xs font-bold text-emerald-400">Teacher: Ma'am Fatima Noor</div>
+              <h3 class="font-bold text-white text-base mt-1">Digital Marketing, SEO & Social Media Growth</h3>
+              <p class="text-xs text-slate-400 mt-1">Sabak 12: Google Meta Ads Campaign Optimization & ROI Tracking</p>
+              
+              <div class="mt-4">
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-400">Progress</span>
+                  <span class="text-emerald-400">60%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <button onclick="openLessonModal('Digital Marketing Mastery', 'Meta & Google Ads Campaign Setup')" class="mt-5 w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition">
+                ▶ Resume Lesson Video
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between">
+            <div class="relative h-44 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80" alt="CIT Course" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+              <span class="absolute top-3 left-3 bg-teal-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
+                85% Mukammal
+              </span>
+            </div>
+            <div class="p-5">
+              <div class="text-xs font-bold text-teal-400">Teacher: Sir Usman Ghani</div>
+              <h3 class="font-bold text-white text-base mt-1">CIT - Certificate in Information Technology (Govt. Pattern)</h3>
+              <p class="text-xs text-slate-400 mt-1">Sabak 19: MS Excel Advanced Formulas, VLOOKUP & Data Entry</p>
+              
+              <div class="mt-4">
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-400">Progress</span>
+                  <span class="text-teal-400">85%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-teal-500 h-full rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+
+              <button onclick="openLessonModal('CIT Certification', 'Excel Advanced Data Manipulation')" class="mt-5 w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-xl shadow-md transition">
+                ▶ Resume Lesson Video
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 5: ADMIN PANEL -->
+    <div id="view-admin" class="page-view hidden py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="bg-gradient-to-r from-amber-950/80 via-slate-900 to-slate-900 border border-amber-900/60 rounded-3xl p-6 sm:p-8 shadow-xl mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="flex items-center gap-5">
+            <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white text-3xl font-black shadow-lg shadow-amber-500/20">
+              R
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold mb-1.5">
+                <span>👑 SUPER ADMIN CONSOLE</span>
+              </div>
+              <h1 class="text-2xl sm:text-3xl font-black text-white display-font">
+                Khush Amdeed, <span class="text-amber-400 underline decoration-amber-500 underline-offset-4">RIDA</span> (Chief Administrator) 👋
+              </h1>
+              <p class="text-xs text-slate-300 mt-1">
+                Admin Name: <strong class="text-white">Rida</strong> • Role: <strong class="text-amber-400">Super Administrator</strong> • Email: <span class="text-slate-400">rida.admin@skillbridge.pk</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-800 px-3 py-1.5 rounded-xl flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Platform Status: Active
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Total Students</div>
+            <div class="text-2xl font-black text-white mt-1 display-font">35,420</div>
+            <div class="text-[11px] text-emerald-400 font-medium mt-1">Across 12+ Courses</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Verified Teachers</div>
+            <div class="text-2xl font-black text-teal-400 mt-1 display-font">12 Faculty Leads</div>
+            <div class="text-[11px] text-teal-300 font-medium mt-1">All verified & active</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+            <div class="text-xs font-semibold text-slate-400 uppercase">PKR Collections</div>
+            <div class="text-2xl font-black text-emerald-400 mt-1 display-font">Rs. 24.8 Million</div>
+            <div class="text-[11px] text-slate-400 font-medium mt-1">Easypaisa / JazzCash / Bank</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Super Admin</div>
+            <div class="text-2xl font-black text-amber-400 mt-1 display-font">RIDA</div>
+            <div class="text-[11px] text-amber-300 font-medium mt-1">Full System Authority</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl mb-8">
+          <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-950/60">
+            <div>
+              <h3 class="font-bold text-white text-base display-font">Course Management & Student Quantities</h3>
+              <p class="text-xs text-slate-400">Admin Rida ke control panel mein tamam courses ki live student tadaad aur teachers:</p>
+            </div>
+            <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              12 Live Courses
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+              <thead class="bg-slate-950 text-slate-400 text-xs uppercase font-bold">
+                <tr>
+                  <th class="py-3.5 px-4">Course Title</th>
+                  <th class="py-3.5 px-4">Assigned Teacher</th>
+                  <th class="py-3.5 px-4">Fees (PKR)</th>
+                  <th class="py-3.5 px-4">Enrolled Students Quantity</th>
+                  <th class="py-3.5 px-4">Total Revenue (PKR)</th>
+                  <th class="py-3.5 px-4 text-right">Admin Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800" id="admin-courses-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW 6: SIGN UP PAGE -->
+    <div id="view-signup" class="page-view hidden py-12">
+      <div class="max-w-xl mx-auto px-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+          <div class="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/80 text-xs font-bold mb-3">
+              <span>🇵🇰 NAYA STUDENT ACCOUNT BANAEN</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-white display-font">Student Sign Up (Registration)</h1>
+            <p class="text-xs text-slate-400 mt-1">Apni mukammal maloomat darj karein taake aapka student profile verify ho sake.</p>
+          </div>
+
+          <form onsubmit="handleSignUpSubmit(event)" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                  Full Name (Aapka Naam) <span class="text-emerald-400">*</span>
+                </label>
+                <input type="text" id="reg-name" required placeholder="e.g. RIDA MATEEN" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                  Father's Name (Walid Ka Naam) <span class="text-emerald-400">*</span>
+                </label>
+                <input type="text" id="reg-father-name" required placeholder="e.g. Abdul Mateen" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                  Class / Qualification <span class="text-emerald-400">*</span>
+                </label>
+                <select id="reg-class" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+                  <option value="">Select Class / Degree</option>
+                  <option value="Matric (9th/10th)">Matric (9th / 10th)</option>
+                  <option value="FSc (Pre-Eng / Pre-Med)">FSc (Pre-Eng / Pre-Med)</option>
+                  <option value="ICS (Computer Science)">ICS (Computer Science)</option>
+                  <option value="I.Com / FA">I.Com / FA</option>
+                  <option value="BS Computer Science / IT">BS Computer Science / IT</option>
+                  <option value="BS Software Engineering">BS Software Engineering</option>
+                  <option value="Graduate / Job Professional">Graduate / Working Professional</option>
+                  <option value="Other">Other / Self Learner</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                  Age (Umar) <span class="text-emerald-400">*</span>
+                </label>
+                <input type="number" id="reg-age" required min="10" max="80" placeholder="e.g. 18" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                Email Address (Email ID) <span class="text-emerald-400">*</span>
+              </label>
+              <input type="email" id="reg-email" required placeholder="rida.mateen@gmail.com" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                  Password <span class="text-emerald-400">*</span>
+                </label>
+                <input type="password" id="reg-password" required minlength="6" placeholder="Min 6 characters" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                  Confirm Password <span class="text-emerald-400">*</span>
+                </label>
+                <input type="password" id="reg-confirm-password" required minlength="6" placeholder="Re-enter password" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+              </div>
+            </div>
+
+            <div class="pt-1">
+              <label class="flex items-start gap-2.5 text-xs text-slate-400 cursor-pointer">
+                <input type="checkbox" required class="mt-0.5 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 bg-slate-950">
+                <span>Mein tasdeeq karta/karti hoon k tamam di gai maloomat durust hain aur mein SkillBridge Academy k qawaneen se sehmat hoon.</span>
+              </label>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-emerald-600/30 transition transform hover:-translate-y-0.5">
+              Account Banaen & Dashboard Open Karein →
+            </button>
+          </form>
+
+          <div class="text-center text-xs text-slate-400 border-t border-slate-800 pt-5 mt-6">
+            Pehle se account mojood hai?{' '}
+            <button onclick="navigate('login')" class="font-bold text-emerald-400 hover:underline">
+              Yahan se Login Karein
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 7: LOGIN PAGE -->
+    <div id="view-login" class="page-view hidden py-12">
+      <div class="max-w-md mx-auto px-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+          <div class="absolute -top-24 -left-24 w-48 h-48 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-emerald-400 border border-slate-700 text-xs font-bold mb-3">
+              <span>🔐 SECURE STUDENT / USER LOGIN</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-white display-font">Login to Your Account</h1>
+            <p class="text-xs text-slate-400 mt-1">Apna registered Email ID aur Password darj karein.</p>
+          </div>
+
+          <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                Email ID (Email Address) <span class="text-emerald-400">*</span>
+              </label>
+              <input type="email" id="login-email" required placeholder="rida.mateen@gmail.com" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  Password <span class="text-emerald-400">*</span>
+                </label>
+                <a href="#" onclick="alert('Password reset link sent to your registered email.'); return false;" class="text-[11px] text-emerald-400 hover:underline">
+                  Bhool gaye? (Forgot?)
+                </a>
+              </div>
+              <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-emerald-600/30 transition transform hover:-translate-y-0.5">
+              Login Karein →
+            </button>
+          </form>
+
+          <div class="mt-8 pt-6 border-t border-slate-800">
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center mb-3">
+              1-Click Demo Account Login:
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="demoLogin('student')" class="p-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-xl text-center transition">
+                <div class="text-xs font-bold text-emerald-400">Student Account</div>
+                <div class="text-[10px] text-slate-500">RIDA MATEEN (Age 18)</div>
+              </button>
+              <button onclick="demoLogin('admin')" class="p-2.5 bg-slate-950 hover:bg-slate-800 border border-amber-900/60 rounded-xl text-center transition">
+                <div class="text-xs font-bold text-amber-400">👑 Admin (RIDA)</div>
+                <div class="text-[10px] text-slate-500">Super Administrator</div>
+              </button>
+            </div>
+          </div>
+
+          <div class="text-center text-xs text-slate-400 pt-5 mt-4">
+            Naye student hain?{' '}
+            <button onclick="navigate('signup')" class="font-bold text-emerald-400 hover:underline">
+              Naya Account Banaen (Sign Up)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-950 border-t border-slate-900 py-12 text-slate-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold text-lg">S</div>
+          <span class="font-black text-white text-base">SkillBridge Pakistan</span>
+        </div>
+        <p class="text-slate-400 leading-relaxed">
+          Pakistan ki pehli modern EdTech academy jahan digital marketing, CIT, English, Graphic Designing, IT aur programming courses sikhaye jaate hain.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold text-sm mb-3">Courses in PKR</h4>
+        <ul class="space-y-2">
+          <li><button onclick="navigate('courses')" class="hover:text-emerald-400">Digital Marketing & SEO Mastery</button></li>
+          <li><button onclick="navigate('courses')" class="hover:text-emerald-400">CIT (Certificate in IT)</button></li>
+          <li><button onclick="navigate('courses')" class="hover:text-emerald-400">Spoken & Business English</button></li>
+          <li><button onclick="navigate('courses')" class="hover:text-emerald-400">Graphic Designing (Photoshop & Canva)</button></li>
+          <li><button onclick="navigate('courses')" class="hover:text-emerald-400">IT Fundamentals & Hardware</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold text-sm mb-3">Portal Directory</h4>
+        <ul class="space-y-2">
+          <li><button onclick="navigate('signup')" class="hover:text-emerald-400">Student Sign Up Form</button></li>
+          <li><button onclick="navigate('login')" class="hover:text-emerald-400">Student Login</button></li>
+          <li><button onclick="navigate('student')" class="hover:text-emerald-400">📋 Enrolled Students Directory</button></li>
+          <li><button onclick="navigate('teachers')" class="hover:text-emerald-400">👨‍🏫 12+ Teachers Directory</button></li>
+          <li><button onclick="navigate('admin')" class="hover:text-amber-400">👑 Admin Panel (Rida)</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold text-sm mb-3">Management & Administration</h4>
+        <p class="text-slate-300 font-semibold mb-1">Super Admin: RIDA</p>
+        <p class="text-slate-400 mb-3">Easypaisa, JazzCash, Sadapay aur tamam Pakistani Banks verified payment gateways.</p>
+        <div class="flex gap-2">
+          <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[11px] font-bold text-emerald-400">Easypaisa</span>
+          <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[11px] font-bold text-amber-400">JazzCash</span>
+          <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[11px] font-bold text-teal-400">Bank Transfer</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-slate-900 text-center text-slate-500">
+      © 2026 SkillBridge Academy Pakistan. Super Admin: RIDA. Tamam Huqooq Mehfooz Hain.
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+  <div id="course-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal('course-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold p-1">✕</button>
+      <div id="course-modal-content"></div>
+    </div>
+  </div>
+
+  <div id="lesson-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-3xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal('lesson-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold p-1">✕</button>
+      
+      <div class="mb-4">
+        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider" id="lesson-modal-course">Course Name</span>
+        <h3 class="text-xl font-black text-white mt-1" id="lesson-modal-title">Lesson Title</h3>
+      </div>
+
+      <div class="w-full aspect-video bg-black rounded-2xl flex flex-col items-center justify-center text-white relative overflow-hidden border border-slate-800 shadow-inner mb-6">
+        <div class="w-16 h-16 rounded-full bg-emerald-600/90 flex items-center justify-center cursor-pointer hover:scale-110 transition shadow-lg">
+          <span class="text-2xl ml-1">▶</span>
+        </div>
+        <p class="text-xs text-slate-400 mt-3 font-medium">Video streaming in HD 1080p with Urdu / English instructions & hands-on practical</p>
+        <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs text-slate-400">
+          <span>08:24 / 24:10</span>
+          <span>1080p • 1.0x</span>
+        </div>
+      </div>
+
+      <div class="p-4 bg-emerald-950/40 rounded-2xl border border-emerald-800/60 flex items-center justify-between">
+        <div>
+          <div class="font-bold text-white text-sm">Online Quiz & Verification</div>
+          <div class="text-xs text-slate-400">5 sawalat ka quiz de kar agla lesson unlock karein.</div>
+        </div>
+        <button onclick="finishLessonQuiz()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition">
+          Take Quiz Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    const COURSES_DATA = [
+      {
+        id: 'c-dm',
+        title: 'Digital Marketing & Social Media Growth',
+        category: 'Digital Marketing',
+        level: 'All Levels',
+        pricePKR: 8500,
+        originalPricePKR: 15000,
+        rating: 4.92,
+        reviewsCount: 3200,
+        instructor: "Ma'am Fatima Noor",
+        instructorRole: 'Head of Digital Marketing & SEO Growth',
+        instructorAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80',
+        duration: '22 Ghante',
+        badge: 'High Earning Skill',
+        badgeColor: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40',
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80',
+        description: 'Facebook Meta Ads, Google Ads, SEO keyword research, TikTok marketing, content strategy aur freelance clients grab karne ka practical tareeqa.',
+        studentQuantity: 3410
+      },
+      {
+        id: 'c-cit',
+        title: 'CIT - Certificate in Information Technology',
+        category: 'CIT / Office',
+        level: 'Beginner',
+        pricePKR: 5500,
+        originalPricePKR: 10000,
+        rating: 4.88,
+        reviewsCount: 4120,
+        instructor: 'Sir Usman Ghani',
+        instructorRole: 'Senior CIT & Office Automation Specialist',
+        instructorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
+        duration: '30 Ghante',
+        badge: 'Govt. Pattern Certified',
+        badgeColor: 'bg-teal-500/20 text-teal-300 border border-teal-500/40',
+        image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
+        description: 'MS Word, MS Excel Advanced, MS PowerPoint, Windows OS, typing speed mastery, InPage Urdu, aur computer fundamentals.',
+        studentQuantity: 4290
+      },
+      {
+        id: 'c-eng',
+        title: 'Spoken & Professional Business English',
+        category: 'English Language',
+        level: 'All Levels',
+        pricePKR: 4999,
+        originalPricePKR: 12000,
+        rating: 4.95,
+        reviewsCount: 3840,
+        instructor: "Ma'am Maryam Nawaz",
+        instructorRole: 'Lead English Language & Corporate Communication Coach',
+        instructorAvatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80',
+        duration: '18 Ghante',
+        badge: 'Confidence Booster',
+        badgeColor: 'bg-pink-500/20 text-pink-300 border border-pink-500/40',
+        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80',
+        description: 'Rozmarrah ki fluently English bol-chal, vocabulary building, grammar mistakes se nijaat, interview preparation aur international clients se baat cheet.',
+        studentQuantity: 3950
+      },
+      {
+        id: 'c-it',
+        title: 'IT Fundamentals, Hardware & Networking',
+        category: 'IT Fundamentals',
+        level: 'Beginner to Intermediate',
+        pricePKR: 7500,
+        originalPricePKR: 14000,
+        rating: 4.84,
+        reviewsCount: 1980,
+        instructor: 'Sir Kamran Akram',
+        instructorRole: 'IT Infrastructure & Systems Specialist',
+        instructorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        duration: '26 Ghante',
+        badge: 'Job Ready',
+        badgeColor: 'bg-blue-500/20 text-blue-300 border border-blue-500/40',
+        image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800&auto=format&fit=crop&q=80',
+        description: 'Computer hardware assembly, OS installation, IP addressing, LAN/WAN routers, network troubleshooting aur IT helpdesk technician skills.',
+        studentQuantity: 2180
+      },
+      {
+        id: 'c-gd',
+        title: 'Graphic Designing Masterclass (Photoshop, Illustrator & Canva)',
+        category: 'Graphic Designing',
+        level: 'Beginner',
+        pricePKR: 8999,
+        originalPricePKR: 16000,
+        rating: 4.96,
+        reviewsCount: 4620,
+        instructor: 'Sir Zain Ul Abideen',
+        instructorRole: 'Creative Director & Senior Brand Designer',
+        instructorAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80',
+        duration: '25 Ghante',
+        badge: 'Top Freelance Skill',
+        badgeColor: 'bg-amber-500/20 text-amber-300 border border-amber-500/40',
+        image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&auto=format&fit=crop&q=80',
+        description: 'Adobe Photoshop photo editing, Adobe Illustrator vector logos, social media posters, banner design, branding guidelines aur Canva pro tricks.',
+        studentQuantity: 4890
+      },
+      {
+        id: 'c-web',
+        title: 'Modern Full-Stack React & Next.js 14 in Urdu',
+        category: 'Web Development',
+        level: 'Intermediate',
+        pricePKR: 14999,
+        originalPricePKR: 25000,
+        rating: 4.9,
+        reviewsCount: 2200,
+        instructor: 'Sir Tariq Mehmood',
+        instructorRole: 'Principal Software Engineer & Full-Stack Lead',
+        instructorAvatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80',
+        duration: '28 Ghante',
+        badge: 'Bestseller in PK',
+        badgeColor: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40',
+        image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=80',
+        description: 'Next.js 14 App Router, Server Actions, TypeScript, Tailwind CSS, aur Supabase Postgres par 5 real SaaS web applications banana seekhein.',
+        studentQuantity: 2450
+      },
+      {
+        id: 'c-ai',
+        title: 'Python for AI, Machine Learning & LLMs',
+        category: 'Artificial Intelligence',
+        level: 'Intermediate',
+        pricePKR: 18500,
+        originalPricePKR: 30000,
+        rating: 4.95,
+        reviewsCount: 1540,
+        instructor: 'Dr. Shahzad Ali',
+        instructorRole: 'AI & Machine Learning Researcher (Ph.D)',
+        instructorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+        duration: '35 Ghante',
+        badge: 'Cutting Edge AI',
+        badgeColor: 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40',
+        image: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&auto=format&fit=crop&q=80',
+        description: 'Zero se Advanced AI! PyTorch, Scikit-learn, LangChain, OpenAI fine-tuning aur custom intelligent chatbots development.',
+        studentQuantity: 1680
+      },
+      {
+        id: 'c-uiux',
+        title: 'UI/UX Design Systems with Figma & Tokens',
+        category: 'UI/UX Design',
+        level: 'Beginner',
+        pricePKR: 9999,
+        originalPricePKR: 18000,
+        rating: 4.88,
+        reviewsCount: 2310,
+        instructor: "Ma'am Ayesha Khan",
+        instructorRole: 'Senior Product & UI/UX Designer',
+        instructorAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80',
+        duration: '20 Ghante',
+        badge: 'Modern UI/UX',
+        badgeColor: 'bg-teal-500/20 text-teal-300 border border-teal-500/40',
+        image: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=800&auto=format&fit=crop&q=80',
+        description: 'Figma Auto-Layout v5, Component Variants, Color Tokens, Mobile App Wireframing aur Client Pitching seekhein.',
+        studentQuantity: 2420
+      },
+      {
+        id: 'c-app',
+        title: 'Mobile App Development (React Native & Expo)',
+        category: 'Mobile Apps',
+        level: 'Intermediate',
+        pricePKR: 12500,
+        originalPricePKR: 22000,
+        rating: 4.85,
+        reviewsCount: 1120,
+        instructor: 'Sir Hamza Siddiqui',
+        instructorRole: 'Mobile Architecture Specialist (iOS/Android)',
+        instructorAvatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80',
+        duration: '24 Ghante',
+        badge: 'iOS & Android',
+        badgeColor: 'bg-purple-500/20 text-purple-300 border border-purple-500/40',
+        image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80',
+        description: 'Single codebase se Android aur iOS apps banayein. Push notifications, camera integration, aur Google Play Store publication.',
+        studentQuantity: 1290
+      },
+      {
+        id: 'c-sec',
+        title: 'Cyber Security & Ethical Hacking Bootcamp',
+        category: 'Cyber Security',
+        level: 'Beginner',
+        pricePKR: 0,
+        originalPricePKR: 15000,
+        rating: 4.92,
+        reviewsCount: 4500,
+        instructor: 'Sir Bilal Ahmed',
+        instructorRole: 'Certified Ethical Hacker & Security Lead',
+        instructorAvatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&auto=format&fit=crop&q=80',
+        duration: '14 Ghante',
+        badge: 'Muft (100% Free)',
+        badgeColor: 'bg-emerald-500/30 text-emerald-300 border border-emerald-400 font-extrabold',
+        image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&auto=format&fit=crop&q=80',
+        description: 'Penetration testing fundamentals, Kali Linux commands, Wireshark network security, aur web vulnerabilities analysis.',
+        studentQuantity: 4720
+      },
+      {
+        id: 'c-data',
+        title: 'Data Analytics with Microsoft PowerBI & Excel',
+        category: 'Data Analytics',
+        level: 'Intermediate',
+        pricePKR: 9500,
+        originalPricePKR: 18000,
+        rating: 4.87,
+        reviewsCount: 1650,
+        instructor: "Ma'am Sana Mir",
+        instructorRole: 'Data Science & Business Intelligence Analyst',
+        instructorAvatar: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80',
+        duration: '22 Ghante',
+        badge: 'High Corporate Demand',
+        badgeColor: 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40',
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
+        description: 'Power Query, DAX formulas, interactive corporate executive dashboards aur financial reports automated banana seekhein.',
+        studentQuantity: 1820
+      },
+      {
+        id: 'c-free',
+        title: 'Upwork & Fiverr Freelancing Masterclass',
+        category: 'Freelancing',
+        level: 'All Levels',
+        pricePKR: 3500,
+        originalPricePKR: 8000,
+        rating: 4.98,
+        reviewsCount: 5200,
+        instructor: 'Sir Adeel Raza',
+        instructorRole: 'Top-Rated Plus Freelance Consultant',
+        instructorAvatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&auto=format&fit=crop&q=80',
+        duration: '12 Ghante',
+        badge: 'Dollars Earning Guide',
+        badgeColor: 'bg-amber-500/20 text-amber-300 border border-amber-500/40',
+        image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop&q=80',
+        description: 'Winning proposal writing, client communication, profile ranking secrets, dollar payment withdraw to Pakistani bank accounts.',
+        studentQuantity: 5380
+      }
+    ];
+
+    const TEACHERS_DATA = [
+      {
+        id: 't1',
+        name: "Ma'am Fatima Noor",
+        role: 'Head of Digital Marketing & SEO Growth',
+        course: 'Digital Marketing & Social Media Growth',
+        exp: '8+ Years Industry Exp',
+        students: '12,500+ Students',
+        rating: 4.95,
+        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80',
+        bio: 'Meta Certified Media Planner & Former Growth Lead at top Pakistani agencies.'
+      },
+      {
+        id: 't2',
+        name: 'Sir Usman Ghani',
+        role: 'Senior CIT & Office Automation Specialist',
+        course: 'CIT - Certificate in Information Technology',
+        exp: '11+ Years Teaching Exp',
+        students: '15,200+ Students',
+        rating: 4.9,
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
+        bio: 'Government board certified computer applications trainer and IT mentor.'
+      },
+      {
+        id: 't3',
+        name: "Ma'am Maryam Nawaz",
+        role: 'Lead English Language & Corporate Communication Coach',
+        course: 'Spoken & Professional Business English',
+        exp: '7+ Years Exp',
+        students: '9,800+ Students',
+        rating: 4.96,
+        avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80',
+        bio: 'IELTS Band 8.5 Trainer & Corporate Soft-skills facilitator.'
+      },
+      {
+        id: 't4',
+        name: 'Sir Kamran Akram',
+        role: 'IT Infrastructure & Systems Specialist',
+        course: 'IT Fundamentals, Hardware & Networking',
+        exp: '10+ Years Exp',
+        students: '6,400+ Students',
+        rating: 4.85,
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        bio: 'CCNA & CompTIA A+ certified network systems consultant.'
+      },
+      {
+        id: 't5',
+        name: 'Sir Zain Ul Abideen',
+        role: 'Creative Director & Senior Brand Designer',
+        course: 'Graphic Designing Masterclass (Photoshop & Canva)',
+        exp: '9+ Years Exp',
+        students: '14,000+ Students',
+        rating: 4.98,
+        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80',
+        bio: 'Brand identity specialist for over 250+ local and international businesses.'
+      },
+      {
+        id: 't6',
+        name: 'Sir Tariq Mehmood',
+        role: 'Principal Software Engineer & Full-Stack Lead',
+        course: 'Modern Full-Stack React & Next.js 14',
+        exp: '12+ Years Exp',
+        students: '8,900+ Students',
+        rating: 4.92,
+        avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80',
+        bio: 'Ex-Silicon Valley remote engineer specialized in high scale web applications.'
+      },
+      {
+        id: 't7',
+        name: 'Dr. Shahzad Ali',
+        role: 'AI & Machine Learning Researcher (Ph.D)',
+        course: 'Python for AI, Machine Learning & LLMs',
+        exp: '9+ Years Exp',
+        students: '5,800+ Students',
+        rating: 4.97,
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+        bio: 'Ph.D in Artificial Intelligence, published author in IEEE NLP conferences.'
+      },
+      {
+        id: 't8',
+        name: "Ma'am Ayesha Khan",
+        role: 'Senior Product & UI/UX Designer',
+        course: 'UI/UX Design Systems with Figma & Tokens',
+        exp: '6+ Years Exp',
+        students: '7,300+ Students',
+        rating: 4.9,
+        avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80',
+        bio: 'Lead product designer designing mobile fintech apps across MENA & Pakistan.'
+      },
+      {
+        id: 't9',
+        name: 'Sir Hamza Siddiqui',
+        role: 'Mobile Architecture Specialist (iOS/Android)',
+        course: 'Mobile App Development (React Native & Expo)',
+        exp: '8+ Years Exp',
+        students: '4,600+ Students',
+        rating: 4.88,
+        avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80',
+        bio: 'Built 30+ production mobile apps on App Store and Google Play.'
+      },
+      {
+        id: 't10',
+        name: 'Sir Bilal Ahmed',
+        role: 'Certified Ethical Hacker & Security Lead',
+        course: 'Cyber Security & Ethical Hacking Bootcamp',
+        exp: '7+ Years Exp',
+        students: '11,000+ Students',
+        rating: 4.94,
+        avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&auto=format&fit=crop&q=80',
+        bio: 'CEH, OSCP certified penetration tester guarding enterprise infrastructures.'
+      },
+      {
+        id: 't11',
+        name: "Ma'am Sana Mir",
+        role: 'Data Science & Business Intelligence Analyst',
+        course: 'Data Analytics with Microsoft PowerBI & Excel',
+        exp: '6+ Years Exp',
+        students: '5,200+ Students',
+        rating: 4.89,
+        avatar: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80',
+        bio: 'Business Intelligence Lead turning data into multi-million dollar decisions.'
+      },
+      {
+        id: 't12',
+        name: 'Sir Adeel Raza',
+        role: 'Top-Rated Plus Freelance Consultant',
+        course: 'Upwork & Fiverr Freelancing Masterclass',
+        exp: '9+ Years Exp',
+        students: '18,500+ Students',
+        rating: 4.99,
+        avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&auto=format&fit=crop&q=80',
+        bio: 'Top 1% earner on Upwork with over $300k+ in verified freelance earnings.'
+      }
+    ];
+
+    const COURSE_STUDENTS_MAP = {
+      'c-dm': [
+        { name: 'RIDA MATEEN', father: 'Abdul Mateen', class: 'BS Computer Science', age: 18, email: 'rida.mateen@gmail.com', date: 'Oct 02, 2026', status: 'Active (85%)' },
+        { name: 'Hamza Farooq', father: 'Farooq Ahmed', class: 'B.Com / Finance', age: 22, email: 'hamza.farooq@gmail.com', date: 'Sep 28, 2026', status: 'Active (45%)' },
+        { name: 'Ayesha Bibi', father: 'Abdul Rehman', class: 'FA / Humanities', age: 19, email: 'ayesha.rehman@gmail.com', date: 'Sep 24, 2026', status: 'Active (70%)' },
+        { name: 'Zohaib Hassan', father: 'Ghulam Mustafa', class: 'ICS 2nd Year', age: 18, email: 'zohaib.mustafa@gmail.com', date: 'Sep 15, 2026', status: 'Completed (100%)' },
+        { name: 'Sara Khan', father: 'Naveed Khan', class: 'BBA Marketing', age: 21, email: 'sara.khan@gmail.com', date: 'Oct 08, 2026', status: 'Active (30%)' }
+      ],
+      'c-cit': [
+        { name: 'Usman Farooq', father: 'Muhammad Farooq', class: 'Matric (10th Class)', age: 16, email: 'usman.f@gmail.com', date: 'Sep 10, 2026', status: 'Active (85%)' },
+        { name: 'Bilal Tariq', father: 'Tariq Javed', class: 'FSc Pre-Eng', age: 17, email: 'bilal.tariq@gmail.com', date: 'Sep 18, 2026', status: 'Active (65%)' },
+        { name: 'Zainab Fatima', father: 'Rashid Mehmood', class: 'I.Com 1st Year', age: 17, email: 'zainab.fatima@gmail.com', date: 'Oct 01, 2026', status: 'Active (50%)' },
+        { name: 'Kashif Ali', father: 'Liaquat Ali', class: 'Matric (9th Class)', age: 15, email: 'kashif.ali@gmail.com', date: 'Oct 04, 2026', status: 'Active (25%)' },
+        { name: 'Nimra Sheikh', father: 'Shahid Sheikh', class: 'FA 2nd Year', age: 18, email: 'nimra.sheikh@gmail.com', date: 'Aug 29, 2026', status: 'Completed (100%)' }
+      ],
+      'c-eng': [
+        { name: 'Hassan Raza', father: 'Muhammad Raza', class: 'BS Software Eng', age: 21, email: 'hassan.raza@gmail.com', date: 'Oct 05, 2026', status: 'Active (40%)' },
+        { name: 'Khadija Tul Kubra', father: 'Muhammad Aslam', class: 'MA English', age: 23, email: 'khadija.aslam@gmail.com', date: 'Sep 20, 2026', status: 'Active (80%)' },
+        { name: 'Adnan Sami', father: 'Sami Ullah', class: 'ICS Part 2', age: 18, email: 'adnan.sami@gmail.com', date: 'Sep 29, 2026', status: 'Active (55%)' },
+        { name: 'Maryam Bibi', father: 'Ghulam Rasool', class: 'FSc Pre-Medical', age: 19, email: 'maryam.rasool@gmail.com', date: 'Oct 06, 2026', status: 'Active (30%)' }
+      ],
+      'c-it': [
+        { name: 'Omer Farooq', father: 'Farooq Azam', class: 'DAE Electrical', age: 20, email: 'omer.azam@gmail.com', date: 'Sep 12, 2026', status: 'Active (75%)' },
+        { name: 'Fahad Mehmood', father: 'Tahir Mehmood', class: 'BS IT 3rd Semester', age: 21, email: 'fahad.tahir@gmail.com', date: 'Sep 19, 2026', status: 'Active (60%)' },
+        { name: 'Tanveer Ahmed', father: 'Ahmed Din', class: 'Matric Computer Science', age: 16, email: 'tanveer.ahmed@gmail.com', date: 'Oct 03, 2026', status: 'Active (35%)' }
+      ],
+      'c-gd': [
+        { name: 'Mahnoor Khan', father: 'Sikandar Khan', class: 'Fine Arts Student', age: 20, email: 'mahnoor.khan@gmail.com', date: 'Sep 22, 2026', status: 'Active (90%)' },
+        { name: 'Shahmeer Ali', father: 'Akbar Ali', class: 'ICS Computer', age: 18, email: 'shahmeer.ali@gmail.com', date: 'Oct 01, 2026', status: 'Active (40%)' },
+        { name: 'Dua Zahra', father: 'Syed Ali Raza', class: 'FSc Pre-Eng', age: 17, email: 'dua.zahra@gmail.com', date: 'Oct 07, 2026', status: 'Active (20%)' },
+        { name: 'Noman Siddiqui', father: 'Waseem Siddiqui', class: 'B.Sc Graphic Design', age: 22, email: 'noman.waseem@gmail.com', date: 'Aug 14, 2026', status: 'Completed (100%)' }
+      ],
+      'c-web': [
+        { name: 'RIDA MATEEN', father: 'Abdul Mateen', class: 'BS Computer Science', age: 18, email: 'rida.mateen@gmail.com', date: 'Sep 01, 2026', status: 'Active (85%)' },
+        { name: 'Saad Ur Rehman', father: 'Atta Ur Rehman', class: 'BS Software Eng', age: 22, email: 'saad.rehman@gmail.com', date: 'Sep 14, 2026', status: 'Active (80%)' },
+        { name: 'Waleed Butt', father: 'Naveed Butt', class: 'ICS 2nd Year', age: 19, email: 'waleed.butt@gmail.com', date: 'Sep 27, 2026', status: 'Active (50%)' }
+      ],
+      'c-ai': [
+        { name: 'Haseeb Ullah', father: 'Inam Ullah', class: 'MS Data Science', age: 24, email: 'haseeb.inam@gmail.com', date: 'Sep 10, 2026', status: 'Active (65%)' },
+        { name: 'Rabia Tariq', father: 'Tariq Masood', class: 'BS Artificial Intelligence', age: 21, email: 'rabia.tariq@gmail.com', date: 'Sep 18, 2026', status: 'Active (70%)' }
+      ],
+      'c-uiux': [
+        { name: 'Zainab Shah', father: 'Syed Qasim Shah', class: 'BS Design', age: 21, email: 'zainab.shah@gmail.com', date: 'Sep 05, 2026', status: 'Active (90%)' },
+        { name: 'Muneeb Akram', father: 'Akram Parvez', class: 'BBA Part 2', age: 20, email: 'muneeb.akram@gmail.com', date: 'Sep 21, 2026', status: 'Active (55%)' }
+      ],
+      'c-app': [
+        { name: 'Arham Javed', father: 'Javed Iqbal', class: 'BS Software Eng', age: 22, email: 'arham.javed@gmail.com', date: 'Sep 25, 2026', status: 'Active (40%)' },
+        { name: 'Shoaib Malik', father: 'Malik Zafar', class: 'ICS Computer', age: 18, email: 'shoaib.malik@gmail.com', date: 'Oct 02, 2026', status: 'Active (30%)' }
+      ],
+      'c-sec': [
+        { name: 'Danish Qureshi', father: 'Iqbal Qureshi', class: 'BS Cyber Security', age: 21, email: 'danish.qureshi@gmail.com', date: 'Aug 10, 2026', status: 'Completed (100%)' },
+        { name: 'Talha Bin Tahir', father: 'Tahir Abbas', class: 'FSc Pre-Eng', age: 18, email: 'talha.tahir@gmail.com', date: 'Sep 12, 2026', status: 'Active (85%)' },
+        { name: 'Anas Bilal', father: 'Muhammad Bilal', class: 'Matric Science', age: 16, email: 'anas.bilal@gmail.com', date: 'Oct 01, 2026', status: 'Active (60%)' }
+      ],
+      'c-data': [
+        { name: 'Mehwish Bano', father: 'Ghulam Qadir', class: 'M.Com Finance', age: 24, email: 'mehwish.qadir@gmail.com', date: 'Sep 20, 2026', status: 'Active (50%)' },
+        { name: 'Ahsan Raza', father: 'Raza Ullah', class: 'BBA Accounting', age: 22, email: 'ahsan.raza@gmail.com', date: 'Sep 28, 2026', status: 'Active (40%)' }
+      ],
+      'c-free': [
+        { name: 'Irfan Haider', father: 'Haider Ali', class: 'BA / Associate Degree', age: 23, email: 'irfan.haider@gmail.com', date: 'Aug 15, 2026', status: 'Completed (100%)' },
+        { name: 'Sumbul Noor', father: 'Noor Muhammad', class: 'BS English', age: 21, email: 'sumbul.noor@gmail.com', date: 'Sep 02, 2026', status: 'Active (95%)' },
+        { name: 'Kamran Bhatti', father: 'Asghar Bhatti', class: 'ICS Computer', age: 19, email: 'kamran.bhatti@gmail.com', date: 'Sep 29, 2026', status: 'Active (70%)' }
+      ]
+    };
+
+    let currentUser = {
+      name: 'RIDA MATEEN',
+      fatherName: 'Abdul Mateen',
+      className: 'BS Computer Science',
+      age: '18',
+      email: 'rida.mateen@gmail.com',
+      role: 'student'
+    };
+
+    function renderCourses(courses, containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      container.innerHTML = courses.map(c => {
+        const isFree = c.pricePKR === 0;
+        const priceDisplay = isFree 
+          ? '<span class="text-emerald-400 font-black text-xl">MUFT (FREE)</span>' 
+          : `<span class="text-white font-black text-xl">Rs. ${c.pricePKR.toLocaleString()}</span> <span class="text-xs text-slate-500 line-through ml-1">Rs. ${c.originalPricePKR.toLocaleString()}</span>`;
+
+        return `
+          <div class="card-3d-wrap">
+            <div class="card-3d bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl flex flex-col justify-between h-full group" onmousemove="handle3DCardHover(event, this)" onmouseleave="reset3DCard(this)">
+              <div>
+                <div class="relative h-48 sm:h-52 overflow-hidden">
+                  <img src="${c.image}" alt="${c.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out">
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+                  
+                  <div class="absolute top-3 left-3 right-3 flex items-center justify-between">
+                    <span class="text-xs font-bold px-3 py-1 rounded-full backdrop-blur-md ${c.badgeColor}">
+                      ${c.badge}
+                    </span>
+                    <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-950/80 text-slate-200 border border-slate-800">
+                      ${c.duration}
+                    </span>
+                  </div>
+
+                  <div class="absolute bottom-3 left-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">${c.category}</span>
+                    <span class="text-xs text-slate-300 ml-2">• ${c.level}</span>
+                  </div>
+                </div>
+
+                <div class="p-6">
+                  <div class="flex items-center justify-between text-xs font-bold mb-2">
+                    <span class="text-amber-400">★ ${c.rating} (${c.reviewsCount.toLocaleString()} Reviews)</span>
+                    <span class="text-teal-400 font-semibold">👥 ${c.studentQuantity.toLocaleString()} Students</span>
+                  </div>
+
+                  <h3 class="text-lg font-bold text-white leading-snug group-hover:text-emerald-400 transition">${c.title}</h3>
+                  <p class="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">${c.description}</p>
+                  
+                  <div class="text-xs text-slate-300 mt-4 flex items-center gap-2.5 p-2 bg-slate-950/60 rounded-xl border border-slate-800/80">
+                    <img src="${c.instructorAvatar}" class="w-7 h-7 rounded-full object-cover border border-emerald-500/40" />
+                    <div>
+                      <span class="text-[10px] text-slate-400 block -mb-0.5">Teacher:</span>
+                      <strong class="text-white font-bold">${c.instructor}</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-6 pt-0 mt-2 border-t border-slate-800/80 pt-4 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Fees (Pakistani Rupees)</span>
+                  <div class="flex items-baseline mt-0.5">
+                    ${priceDisplay}
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button onclick="viewCourseDetails('${c.id}')" class="px-3 py-2 text-xs font-bold text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-xl transition">
+                    Details
+                  </button>
+                  <button onclick="enrollCourse('${c.id}')" class="px-4 py-2 text-xs font-extrabold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-xl shadow-md shadow-emerald-600/30 transition">
+                    Enroll Now
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTeachers() {
+      const container = document.getElementById('all-teachers-grid');
+      const snippet = document.getElementById('home-teachers-snippet');
+
+      if (snippet) {
+        snippet.innerHTML = TEACHERS_DATA.slice(0, 6).map(t => `
+          <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl text-center group hover:border-emerald-500/50 transition">
+            <img src="${t.avatar}" class="w-16 h-16 rounded-full mx-auto object-cover border-2 border-teal-500/40 group-hover:scale-105 transition" />
+            <h4 class="font-bold text-white text-xs mt-3">${t.name}</h4>
+            <p class="text-[10px] text-emerald-400 font-medium truncate mt-0.5">${t.course}</p>
+            <span class="text-[10px] text-slate-400 mt-1 block">★ ${t.rating}</span>
+          </div>
+        `).join('');
+      }
+
+      if (container) {
+        container.innerHTML = TEACHERS_DATA.map(t => `
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between hover:border-teal-500/50 transition">
+            <div class="flex items-start gap-4">
+              <img src="${t.avatar}" class="w-16 h-16 rounded-2xl object-cover border-2 border-teal-500/40 shadow-md" />
+              <div>
+                <span class="text-[10px] uppercase font-bold text-teal-400 tracking-wider">Expert Teacher</span>
+                <h3 class="font-bold text-white text-base leading-snug">${t.name}</h3>
+                <p class="text-xs text-slate-300 mt-0.5 font-medium">${t.role}</p>
+                <div class="text-[11px] text-amber-400 font-bold mt-1">★ ${t.rating} • ${t.students}</div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-800">
+              <div class="text-[11px] text-slate-400">Teaches Course:</div>
+              <div class="text-xs font-bold text-emerald-400 mt-0.5">${t.course}</div>
+              <p class="text-xs text-slate-400 mt-2 leading-relaxed">${t.bio}</p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+              <span>${t.exp}</span>
+              <button onclick="navigate('courses')" class="text-xs font-bold text-teal-400 hover:underline">
+                View Courses →
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function initDirectorySelectors() {
+      const select = document.getElementById('directory-course-select');
+      if (!select) return;
+
+      select.innerHTML = COURSES_DATA.map(c => `
+        <option value="${c.id}">${c.title} (${(COURSE_STUDENTS_MAP[c.id] || []).length} Shown / ${c.studentQuantity.toLocaleString()} Total)</option>
+      `).join('');
+
+      renderSelectedCourseStudents();
+    }
+
+    function renderSelectedCourseStudents() {
+      const select = document.getElementById('directory-course-select');
+      const courseId = select ? select.value : 'c-dm';
+      const course = COURSES_DATA.find(c => c.id === courseId) || COURSES_DATA[0];
+      const students = COURSE_STUDENTS_MAP[courseId] || [];
+
+      const badge = document.getElementById('directory-course-header-badge');
+      if (badge) {
+        badge.innerHTML = `
+          <div class="flex items-center gap-3">
+            <img src="${course.image}" class="w-12 h-12 rounded-xl object-cover border border-slate-700" />
+            <div>
+              <span class="text-[11px] text-emerald-400 font-bold uppercase tracking-wider">${course.category}</span>
+              <h4 class="font-bold text-white text-sm sm:text-base">${course.title}</h4>
+              <p class="text-xs text-slate-400">Course Mentor: <strong class="text-slate-200">${course.instructor}</strong></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 text-right">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase font-bold block">Total Enrolled</span>
+              <span class="text-lg font-black text-emerald-400">${course.studentQuantity.toLocaleString()} Students</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase font-bold block">Course Fees</span>
+              <span class="text-lg font-black text-white">${course.pricePKR === 0 ? 'FREE' : 'Rs. ' + course.pricePKR.toLocaleString()}</span>
+            </div>
+          </div>
+        `;
+      }
+
+      const tbody = document.getElementById('directory-students-tbody');
+      if (tbody) {
+        tbody.innerHTML = students.map((s, idx) => `
+          <tr class="hover:bg-slate-950/60 transition">
+            <td class="py-3.5 px-4 font-bold text-white flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 flex items-center justify-center text-[10px] font-black">${idx + 1}</span>
+              <span>${s.name}</span>
+            </td>
+            <td class="py-3.5 px-4 text-slate-200 font-medium">${s.father}</td>
+            <td class="py-3.5 px-4 text-emerald-400 font-semibold">${s.class}</td>
+            <td class="py-3.5 px-4 text-slate-300">${s.age} Saal</td>
+            <td class="py-3.5 px-4 font-mono text-xs text-slate-400">${s.email}</td>
+            <td class="py-3.5 px-4 text-slate-400 text-xs">${s.date}</td>
+            <td class="py-3.5 px-4 text-right">
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                ${s.status}
+              </span>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function renderAdminTable() {
+      const tbody = document.getElementById('admin-courses-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = COURSES_DATA.map(c => {
+        const estRevenue = c.pricePKR * c.studentQuantity;
+        const revDisplay = c.pricePKR === 0 ? 'Rs. 0 (Free Track)' : `Rs. ${estRevenue.toLocaleString()}`;
+
+        return `
+          <tr class="hover:bg-slate-950/60 transition">
+            <td class="py-3.5 px-4 font-bold text-white">${c.title}</td>
+            <td class="py-3.5 px-4 text-teal-300 font-semibold">${c.instructor}</td>
+            <td class="py-3.5 px-4 font-bold text-white">${c.pricePKR === 0 ? 'FREE' : 'Rs. ' + c.pricePKR.toLocaleString()}</td>
+            <td class="py-3.5 px-4 font-black text-emerald-400">${c.studentQuantity.toLocaleString()} Students</td>
+            <td class="py-3.5 px-4 font-bold text-amber-400">${revDisplay}</td>
+            <td class="py-3.5 px-4 text-right space-x-2">
+              <button onclick="alert('Admin Rida approved course audit for: ${c.title}')" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition">Approved ✓</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function handle3DCardHover(e, card) {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -10;
+      const rotateY = ((x - centerX) / centerX) * 10;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    }
+
+    function reset3DCard(card) {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+    }
+
+    function initThreeHero() {
+      const container = document.getElementById('three-hero-container');
+      if (!container) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+      camera.position.z = 4.2;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const geometry = new THREE.IcosahedronGeometry(2.1, 2);
+      const wireframeMaterial = new THREE.MeshBasicMaterial({
+        color: 0x10b981,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.55
+      });
+      const sphere = new THREE.Mesh(geometry, wireframeMaterial);
+      scene.add(sphere);
+
+      const coreGeometry = new THREE.IcosahedronGeometry(1.2, 1);
+      const coreMaterial = new THREE.MeshBasicMaterial({
+        color: 0x14b8a6,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.8
+      });
+      const core = new THREE.Mesh(coreGeometry, coreMaterial);
+      scene.add(core);
+
+      const particlesGeo = new THREE.BufferGeometry();
+      const count = 300;
+      const positions = new Float32Array(count * 3);
+
+      for (let i = 0; i < count * 3; i++) {
+        positions[i] = (Math.random() - 0.5) * 8;
+      }
+      particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const particlesMat = new THREE.PointsMaterial({
+        size: 0.04,
+        color: 0x34d399,
+        transparent: true,
+        opacity: 0.7
+      });
+      const particles = new THREE.Points(particlesGeo, particlesMat);
+      scene.add(particles);
+
+      let mouseX = 0, mouseY = 0;
+      let targetX = 0, targetY = 0;
+      let isDragging = false;
+      let prevMouseX = 0, prevMouseY = 0;
+
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouseY = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+        targetX = mouseX * 0.8;
+        targetY = mouseY * 0.8;
+      });
+
+      container.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+
+      window.addEventListener('mouseup', () => { isDragging = false; });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - prevMouseX;
+        const deltaY = e.clientY - prevMouseY;
+        sphere.rotation.y += deltaX * 0.01;
+        sphere.rotation.x += deltaY * 0.01;
+        core.rotation.y += deltaX * 0.015;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        sphere.rotation.y += 0.005;
+        sphere.rotation.x += 0.002;
+        core.rotation.y -= 0.008;
+        particles.rotation.y += 0.001;
+
+        camera.position.x += (targetX - camera.position.x) * 0.05;
+        camera.position.y += (-targetY - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        if (!container.clientWidth) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
+    }
+
+    function navigate(viewName) {
+      document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById('view-' + viewName);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('text-emerald-400', 'bg-slate-900', 'text-amber-400');
+      });
+      const activeBtn = document.getElementById('nav-' + viewName);
+      if (activeBtn) {
+        if (viewName === 'admin') activeBtn.classList.add('text-amber-400', 'bg-slate-900');
+        else activeBtn.classList.add('text-emerald-400', 'bg-slate-900');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showDirectoryTab() {
+      navigate('student');
+      document.getElementById('enrolled-students-directory-section')?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function filterCoursesList() {
+      const q = (document.getElementById('course-search-input')?.value || '').toLowerCase();
+      const cat = document.getElementById('filter-cat')?.value || 'all';
+      const prc = document.getElementById('filter-price')?.value || 'all';
+      const srt = document.getElementById('filter-sort')?.value || 'popular';
+
+      let list = COURSES_DATA.filter(c => {
+        const matchesQ = c.title.toLowerCase().includes(q) || c.instructor.toLowerCase().includes(q) || c.category.toLowerCase().includes(q);
+        const matchesCat = (cat === 'all') || (c.category === cat);
+        
+        let matchesPrc = true;
+        if (prc === 'free') matchesPrc = c.pricePKR === 0;
+        else if (prc === 'under10k') matchesPrc = c.pricePKR > 0 && c.pricePKR <= 10000;
+        else if (prc === 'above10k') matchesPrc = c.pricePKR > 10000;
+
+        return matchesQ && matchesCat && matchesPrc;
+      });
+
+      if (srt === 'price-asc') list.sort((a,b) => a.pricePKR - b.pricePKR);
+      else if (srt === 'price-desc') list.sort((a,b) => b.pricePKR - a.pricePKR);
+      else if (srt === 'rating') list.sort((a,b) => b.rating - a.rating);
+
+      renderCourses(list, 'catalog-courses-grid');
+    }
+
+    function handleSignUpSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      const fatherName = document.getElementById('reg-father-name').value;
+      const className = document.getElementById('reg-class').value;
+      const age = document.getElementById('reg-age').value;
+      const email = document.getElementById('reg-email').value;
+      const pass = document.getElementById('reg-password').value;
+      const confirmPass = document.getElementById('reg-confirm-password').value;
+
+      if (pass !== confirmPass) {
+        alert('Passwords aik jese nahi hain! Barahe meharbani check karein.');
+        return;
+      }
+
+      currentUser = {
+        name,
+        fatherName,
+        className,
+        age,
+        email,
+        role: 'student'
+      };
+
+      COURSE_STUDENTS_MAP['c-dm'].unshift({
+        name,
+        father: fatherName,
+        class: className,
+        age: parseInt(age),
+        email,
+        date: 'Today',
+        status: 'Active (New)'
+      });
+
+      updateUserUI();
+      renderSelectedCourseStudents();
+
+      alert(`🎉 Mubarak ho ${name}! Aapka Student Account kamyabi se ban gaya hai.\n\nName: ${name}\nFather Name: ${fatherName}\nClass: ${className}\nAge: ${age} Saal\nEmail ID: ${email}\n\nAapko Student Dashboard aur Directory par le jaya ja raha hai...`);
+      navigate('student');
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      currentUser.email = email;
+      updateUserUI();
+      alert(`✅ Login Kamyab! Khush amdeed, ${currentUser.name}!`);
+      navigate('student');
+    }
+
+    function demoLogin(role) {
+      if (role === 'student') {
+        currentUser = {
+          name: 'RIDA MATEEN',
+          fatherName: 'Abdul Mateen',
+          className: 'BS Computer Science',
+          age: '18',
+          email: 'rida.mateen@gmail.com',
+          role: 'student'
+        };
+        updateUserUI();
+        navigate('student');
+      } else if (role === 'admin') {
+        currentUser = {
+          name: 'RIDA',
+          fatherName: 'Super Admin',
+          className: 'Chief Administrator',
+          age: '30',
+          email: 'rida.admin@skillbridge.pk',
+          role: 'admin'
+        };
+        updateUserUI();
+        navigate('admin');
+        alert('👑 Welcome RIDA! Super Admin console unlocked.');
+      }
+    }
+
+    function updateUserUI() {
+      document.getElementById('nav-auth-buttons').classList.add('hidden');
+      const loggedBadge = document.getElementById('nav-user-logged');
+      loggedBadge.classList.remove('hidden');
+      loggedBadge.classList.add('flex');
+
+      document.getElementById('logged-user-name').innerText = currentUser.name;
+      document.getElementById('logged-user-class').innerText = `${currentUser.className} • Age ${currentUser.age}`;
+
+      const dashName = document.getElementById('dash-student-name');
+      if (dashName) dashName.innerText = currentUser.name;
+      const dashFather = document.getElementById('dash-father-name');
+      if (dashFather) dashFather.innerText = currentUser.fatherName;
+      const dashClass = document.getElementById('dash-class');
+      if (dashClass) dashClass.innerText = currentUser.className;
+      const dashAge = document.getElementById('dash-age');
+      if (dashAge) dashAge.innerText = `${currentUser.age} Saal`;
+      const dashAvatar = document.getElementById('dash-avatar-letter');
+      if (dashAvatar) dashAvatar.innerText = currentUser.name.charAt(0).toUpperCase();
+    }
+
+    function logoutUser() {
+      document.getElementById('nav-auth-buttons').classList.remove('hidden');
+      const loggedBadge = document.getElementById('nav-user-logged');
+      loggedBadge.classList.add('hidden');
+      loggedBadge.classList.remove('flex');
+      navigate('home');
+      alert('Aap logout hogaye hain.');
+    }
+
+    function viewCourseDetails(id) {
+      const c = COURSES_DATA.find(x => x.id === id);
+      if (!c) return;
+
+      const isFree = c.pricePKR === 0;
+      const priceText = isFree ? 'MUFT (FREE)' : `Rs. ${c.pricePKR.toLocaleString()}`;
+
+      const content = `
+        <div class="relative h-56 rounded-2xl overflow-hidden mb-6">
+          <img src="${c.image}" alt="${c.title}" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+          <span class="absolute top-3 left-3 text-xs font-bold px-3 py-1 rounded-full ${c.badgeColor}">
+            ${c.badge}
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase mb-1">
+          <span>${c.category}</span> • <span>${c.level}</span> • <span>${c.duration}</span>
+        </div>
+
+        <h2 class="text-2xl font-black text-white display-font">${c.title}</h2>
+        <div class="text-xs text-slate-400 mt-2 flex items-center gap-2">
+          <span>Instructor: <strong class="text-slate-200">${c.instructor}</strong></span>
+          <span>•</span>
+          <span class="text-amber-400 font-bold">★ ${c.rating}</span>
+          <span>•</span>
+          <span class="text-teal-400 font-bold">👥 ${c.studentQuantity.toLocaleString()} Enrolled Students</span>
+        </div>
+
+        <p class="text-sm text-slate-300 mt-4 leading-relaxed">${c.description}</p>
+
+        <div class="mt-6 border-t border-slate-800 pt-4">
+          <h4 class="font-bold text-white text-sm mb-3">Course Curriculum Highlights:</h4>
+          <div class="space-y-2 text-xs">
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center">
+              <span class="font-semibold text-slate-200">1. Fundamentals & Tool Setup (Urdu / English)</span>
+              <span class="text-emerald-400 font-bold">Free Preview</span>
+            </div>
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center">
+              <span class="font-semibold text-slate-200">2. Core Practical Projects & Hands-on Lab</span>
+              <span class="text-slate-500">8 Lessons</span>
+            </div>
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center">
+              <span class="font-semibold text-slate-200">3. Live Assignments, Final Quiz & Portfolio Project</span>
+              <span class="text-slate-500">12 Lessons</span>
+            </div>
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center">
+              <span class="font-semibold text-slate-200">4. QR Code Verified Certificate & Career Guidance</span>
+              <span class="text-emerald-400 font-bold">Verified Certificate</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 border-t border-slate-800 pt-5 flex items-center justify-between">
+          <div>
+            <div class="text-[11px] uppercase font-bold text-slate-400">Total Fees (Pakistani Rupees)</div>
+            <div class="text-2xl font-black text-white">${priceText}</div>
+          </div>
+          <button onclick="enrollCourse('${c.id}')" class="px-7 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm rounded-xl shadow-lg shadow-emerald-600/30 transition">
+            Enroll & Shuru Karein →
+          </button>
+        </div>
+      `;
+
+      document.getElementById('course-modal-content').innerHTML = content;
+      openModal('course-modal');
+    }
+
+    function enrollCourse(id) {
+      closeModal('course-modal');
+      const c = COURSES_DATA.find(x => x.id === id);
+      alert(`🎉 Mubarak ho! Aapka enrollment "${c.title}" mein kamyab hogaya hai.\n\nAapko aapke Student Portal par le jaya ja raha hai!`);
+      navigate('student');
+    }
+
+    function openLessonModal(courseName, lessonName) {
+      document.getElementById('lesson-modal-course').innerText = courseName;
+      document.getElementById('lesson-modal-title').innerText = lessonName;
+      openModal('lesson-modal');
+    }
+
+    function finishLessonQuiz() {
+      closeModal('lesson-modal');
+      alert('🏆 Quiz Completed! Score: 100% (5/5).\nSabak mukammal hogaya aur aapki progress update kardi gai hai!');
+    }
+
+    function openModal(id) {
+      document.getElementById(id)?.classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id)?.classList.add('hidden');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCourses(COURSES_DATA.slice(0, 6), 'home-featured-grid');
+      renderCourses(COURSES_DATA, 'catalog-courses-grid');
+      renderTeachers();
+      initDirectorySelectors();
+      renderAdminTable();
+      initThreeHero();
+      updateUserUI();
+    });
+  </script>
+</body>
+</html>
